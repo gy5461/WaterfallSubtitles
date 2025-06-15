@@ -13,9 +13,6 @@ struct FWaterfallSubtitleItem
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "字幕ID"))
-	int32 ID;
-
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "字幕内容"))
 	FString Content;
 
@@ -26,7 +23,7 @@ struct FWaterfallSubtitleItem
 	int32 StartHeight;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "字幕播放速度"))
-	float Speed = 5.f;
+	float Speed = 200.f;
 };
 
 /**
