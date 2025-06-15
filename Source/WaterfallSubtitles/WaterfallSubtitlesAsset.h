@@ -6,6 +6,8 @@
 #include "Engine/DataAsset.h"
 #include "WaterfallSubtitlesAsset.generated.h"
 
+class USlateTextureAtlasInterface;
+
 USTRUCT(BlueprintType)
 struct FWaterfallSubtitleItem
 {

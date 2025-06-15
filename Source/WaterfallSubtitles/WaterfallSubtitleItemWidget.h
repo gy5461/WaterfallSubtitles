@@ -25,7 +25,7 @@ public:
 	UTextBlock* Text_Content;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
-	UImage* Image_Icon;
+	UImage* Image_Head;
 
 	int32 CacheSpeed;
 };
