@@ -1,2 +1,7 @@
-Binaries
-Intermediate
+Binaries/
+Intermediate/
+.vs/
+Saved/
+.idea/
+.vsconfig/
+*.sln
