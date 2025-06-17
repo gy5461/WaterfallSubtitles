@@ -6,7 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "WaterfallSubtitlesAsset.generated.h"
 
-class USlateTextureAtlasInterface;
+class ISlateTextureAtlasInterface;
 
 USTRUCT(BlueprintType)
 struct FWaterfallSubtitleItem
@@ -17,7 +17,7 @@ struct FWaterfallSubtitleItem
 	FString Content;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "字幕头像"))
-	UTexture2D* HeadIcon;
+	TScriptInterface<ISlateTextureAtlasInterface> HeadIcon;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "字幕起始高度"))
 	int32 StartHeight;
