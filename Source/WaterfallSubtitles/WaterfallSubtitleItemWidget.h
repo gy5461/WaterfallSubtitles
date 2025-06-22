@@ -7,6 +7,7 @@
 #include "Blueprint/UserWidget.h"
 #include "WaterfallSubtitleItemWidget.generated.h"
 
+class UHorizontalBox;
 class UImage;
 class UTextBlock;
 /**
@@ -26,6 +27,15 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	UImage* Image_Head;
+	
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
+	UImage* Image_Bg;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
+	UHorizontalBox* HB_Content;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	TSubclassOf<UUserWidget> EmojiItemClass;
 
 	int32 CacheSpeed;
 };

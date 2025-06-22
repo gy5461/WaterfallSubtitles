@@ -22,23 +22,39 @@ void UWaterfallSubtitleMainWidget::NativeConstruct()
 	}
 
 	FVector2D ViewportSize = UWidgetLayoutLibrary::GetViewportSize(this);
+	float ViewportScale = UWidgetLayoutLibrary::GetViewportScale(this);
+	float ScreenSizeX = ViewportSize.X / ViewportScale;
 
 	ShowingSubtitles.Empty();
 	for (auto& Subtitle : Subtitles)
 	{
 		FWaterfallSubtitleItem ItemInfo = Subtitle.Value;
-		if (UWaterfallSubtitleItemWidget* SubtitleItemUI = CreateWidget<UWaterfallSubtitleItemWidget>(this, SubtitleItemClass))
-		{
-			SubtitleItemUI->SetData(ItemInfo);
-			
-			if (UCanvasPanelSlot* ItemSlot = Pnl_Main->AddChildToCanvas(SubtitleItemUI))
-			{
-				ItemSlot->SetAutoSize(true);
-				FVector2D ItemStartPos = FVector2D(ViewportSize.X, ItemInfo.StartHeight);
-				ItemSlot->SetPosition(ItemStartPos);
-			}
 
-			ShowingSubtitles.Add(SubtitleItemUI);
+		auto CreateSubtitle = [this, ItemInfo, ScreenSizeX]()
+		{
+			if (UWaterfallSubtitleItemWidget* SubtitleItemUI = CreateWidget<UWaterfallSubtitleItemWidget>(this, SubtitleItemClass))
+			{
+				SubtitleItemUI->SetData(ItemInfo);
+			
+				if (UCanvasPanelSlot* ItemSlot = Pnl_Main->AddChildToCanvas(SubtitleItemUI))
+				{
+					ItemSlot->SetAutoSize(true);
+					FVector2D ItemStartPos = FVector2D(ScreenSizeX, ItemInfo.StartHeight);
+					ItemSlot->SetPosition(ItemStartPos);
+				}
+
+				ShowingSubtitles.Add(SubtitleItemUI);
+			}
+		};
+
+		if (FMath::IsNearlyEqual(ItemInfo.StartTime, 0))
+		{
+			CreateSubtitle();
+		}
+		else
+		{
+			FTimerHandle StartPlayTimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(StartPlayTimerHandle, CreateSubtitle, ItemInfo.StartTime, false, ItemInfo.StartTime);
 		}
 	}
 }

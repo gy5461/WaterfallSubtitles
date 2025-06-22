@@ -24,6 +24,18 @@ struct FWaterfallSubtitleItem
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "字幕播放速度"))
 	float Speed = 200.f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "字幕开始播放时间"))
+	float StartTime = 0.f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "字幕颜色"))
+	FLinearColor TextColor = FLinearColor::White;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "字幕背景颜色"))
+	FLinearColor TextBgColor = FLinearColor(0, 0, 0, 0.5);
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "表情列表"))
+	TArray<TScriptInterface<ISlateTextureAtlasInterface>> EmojiList;
 };
 
 /**
