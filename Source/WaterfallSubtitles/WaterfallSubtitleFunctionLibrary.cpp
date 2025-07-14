@@ -32,5 +32,18 @@ void UWaterfallSubtitleFunctionLibrary::Init()
 	if (UWaterfallSubtitlesAsset* WaterfallDA = LoadObject<UWaterfallSubtitlesAsset>(nullptr, TEXT("/Game/Data/DA_WaterfallSubtitles.DA_WaterfallSubtitles")))
 	{
 		CacheSubtitlesData = WaterfallDA->Subtitles;
+		int32 Num = CacheSubtitlesData.Num();
+		for(int32 Idx = 0; Idx < 100; ++Idx)
+		{
+			for(auto& Subtitle : WaterfallDA->Subtitles)
+			{
+				Num++;
+
+				Subtitle.Value.Speed = FMath::RandRange(100, 600);
+				Subtitle.Value.StartHeight = FMath::RandRange(50, 950);
+				Subtitle.Value.StartTime = FMath::RandRange(0, 100);
+				CacheSubtitlesData.Add(Num, Subtitle.Value);
+			}
+		}
 	}
 }
