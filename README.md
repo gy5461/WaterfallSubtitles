@@ -2,12 +2,15 @@
 ## 简介
 瀑布流弹幕播放系统
 ## 播放效果
-![alt text](f3f40dbdac4c8a2d9119ad50eee57dd.png)
+![alt text](Play.png)
 
 ## 支持配置
-![alt text](cea87bf16bced1a9cc2a2a5b84aa862.png)
+![alt text](Config.png)
 
 ## 性能数据
-![alt text](900aaf35cb386d13dfdd104ebf74066.png)
+### 优化前初始性能数据
+#### Stat Slate
+![alt text](InitStatSlate.png)
 
-![alt text](24abf92016fc854c64b3075875bdb01.png)
+#### Stat RHI
+![alt text](InitStatRHI.png)

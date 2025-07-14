@@ -68,7 +68,6 @@ void UWaterfallSubtitleMainWidget::NativeTick(const FGeometry& MyGeometry, float
 		UWaterfallSubtitleItemWidget* SubtitleItemUI = *SubtitleItr;
 		if (SubtitleItemUI == nullptr)
 		{
-			SubtitleItr.RemoveCurrent();
 			continue;
 		}
 	
@@ -79,8 +78,12 @@ void UWaterfallSubtitleMainWidget::NativeTick(const FGeometry& MyGeometry, float
 	
 			if (CurPos.X + ItemSize.X < 0)
 			{
-				SubtitleItemUI->RemoveFromParent();
-				SubtitleItr.RemoveCurrent();
+				FVector2D ViewportSize = UWidgetLayoutLibrary::GetViewportSize(this);
+				float ViewportScale = UWidgetLayoutLibrary::GetViewportScale(this);
+				float ScreenSizeX = ViewportSize.X / ViewportScale;
+				
+				FVector2D ItemStartPos = FVector2D(ScreenSizeX, SubtitleItemUI->CacheStartHeight);
+				ItemSlot->SetPosition(ItemStartPos);
 			}
 			else
 			{

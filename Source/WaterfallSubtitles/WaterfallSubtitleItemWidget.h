@@ -38,4 +38,5 @@ public:
 	TSubclassOf<UUserWidget> EmojiItemClass;
 
 	int32 CacheSpeed;
+	int32 CacheStartHeight;
 };

@@ -29,6 +29,7 @@ void UWaterfallSubtitleItemWidget::SetData(const FWaterfallSubtitleItem& InItemI
 	}
 
 	CacheSpeed = InItemInfo.Speed;
+	CacheStartHeight = InItemInfo.StartHeight;
 
 	if (HB_Content)
 	{
