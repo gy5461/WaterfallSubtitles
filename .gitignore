@@ -5,3 +5,5 @@ Saved/
 .idea/
 .vsconfig
 *.sln
+*.uproject
+*.sln.DotSettings.user
