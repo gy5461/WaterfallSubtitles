@@ -63,6 +63,7 @@ void UWaterfallSubtitleMainWidget::NativeTick(const FGeometry& MyGeometry, float
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
+	int32 LayerID = TakeWidget()->GetPersistentState().LayerId;
 	for (auto SubtitleItr = ShowingSubtitles.CreateIterator(); SubtitleItr; ++SubtitleItr)
 	{
 		UWaterfallSubtitleItemWidget* SubtitleItemUI = *SubtitleItr;
@@ -70,6 +71,8 @@ void UWaterfallSubtitleMainWidget::NativeTick(const FGeometry& MyGeometry, float
 		{
 			continue;
 		}
+	
+		LayerID = SubtitleItemUI->TakeWidget()->GetPersistentState().LayerId;
 	
 		if (UCanvasPanelSlot* ItemSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(SubtitleItemUI))
 		{
@@ -92,4 +95,7 @@ void UWaterfallSubtitleMainWidget::NativeTick(const FGeometry& MyGeometry, float
 			}
 		}
 	}
+	
+	FString LayerIDStr = FString::Printf(TEXT("LayerID=%d"), LayerID);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, *LayerIDStr);
 }
