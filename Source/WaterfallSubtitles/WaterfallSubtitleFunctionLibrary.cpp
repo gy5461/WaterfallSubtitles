@@ -37,7 +37,7 @@ void UWaterfallSubtitleFunctionLibrary::Init()
 		{
 			for(auto& Subtitle : WaterfallDA->Subtitles)
 			{
-				Subtitle.Value.Speed = FMath::RandRange(100, 600);
+				Subtitle.Value.Speed = FMath::RandRange(200, 800);
 				Subtitle.Value.StartHeight = FMath::RandRange(50, 950);
 				Subtitle.Value.StartTime = FMath::RandRange(0, 5);
 				CacheSubtitlesData.Add(Num, Subtitle.Value);

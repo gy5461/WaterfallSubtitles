@@ -9,11 +9,18 @@
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Components/HorizontalBox.h"
 
 void UWaterfallSubtitleMainWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	FTimerHandle StartTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(StartTimerHandle, this, &UWaterfallSubtitleMainWidget::InitSubtitles, 0.1, false, 0.1);
+}
+
+void UWaterfallSubtitleMainWidget::InitSubtitles()
+{
 	TMap<int32, FWaterfallSubtitleItem> Subtitles = UWaterfallSubtitleFunctionLibrary::GetSubtitles();
 
 	if (Pnl_Main == nullptr)
@@ -57,13 +64,13 @@ void UWaterfallSubtitleMainWidget::NativeConstruct()
 			GetWorld()->GetTimerManager().SetTimer(StartPlayTimerHandle, CreateSubtitle, ItemInfo.StartTime, false, ItemInfo.StartTime);
 		}
 	}
+
+	FTimerHandle UpdateTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(UpdateTimerHandle, this, &UWaterfallSubtitleMainWidget::UpdateSubtitles, UpdateInterval, true);
 }
 
-void UWaterfallSubtitleMainWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+void UWaterfallSubtitleMainWidget::UpdateSubtitles()
 {
-	Super::NativeTick(MyGeometry, InDeltaTime);
-
-	int32 LayerID = TakeWidget()->GetPersistentState().LayerId;
 	for (auto SubtitleItr = ShowingSubtitles.CreateIterator(); SubtitleItr; ++SubtitleItr)
 	{
 		UWaterfallSubtitleItemWidget* SubtitleItemUI = *SubtitleItr;
@@ -71,31 +78,34 @@ void UWaterfallSubtitleMainWidget::NativeTick(const FGeometry& MyGeometry, float
 		{
 			continue;
 		}
-	
-		LayerID = SubtitleItemUI->TakeWidget()->GetPersistentState().LayerId;
-	
+
+		auto SetSubtitleTranslation = [&](const FVector2D& InTrans)
+		{
+			SubtitleItemUI->SetSubtitleTranslation(SubtitleItemUI->HB_Subtitle, InTrans);
+		};
+		
+		
 		if (UCanvasPanelSlot* ItemSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(SubtitleItemUI))
 		{
 			FVector2D CurPos = ItemSlot->GetPosition();
 			FVector2D ItemSize = SubtitleItemUI->GetDesiredSize();
 	
-			if (CurPos.X + ItemSize.X < 0)
+			if (CurPos.X + ItemSize.X * 1.5 < 0)
 			{
 				FVector2D ViewportSize = UWidgetLayoutLibrary::GetViewportSize(this);
 				float ViewportScale = UWidgetLayoutLibrary::GetViewportScale(this);
 				float ScreenSizeX = ViewportSize.X / ViewportScale;
 				
 				FVector2D ItemStartPos = FVector2D(ScreenSizeX, SubtitleItemUI->CacheStartHeight);
+				SetSubtitleTranslation(ItemStartPos - CurPos);
 				ItemSlot->SetPosition(ItemStartPos);
 			}
 			else
 			{
-				FVector2D NewPos = FVector2D(CurPos.X - SubtitleItemUI->CacheSpeed * InDeltaTime, CurPos.Y);
+				FVector2D NewPos = FVector2D(CurPos.X - SubtitleItemUI->CacheSpeed * UpdateInterval, CurPos.Y);
+				SetSubtitleTranslation(NewPos - CurPos);
 				ItemSlot->SetPosition(NewPos);
 			}
 		}
 	}
-	
-	FString LayerIDStr = FString::Printf(TEXT("LayerID=%d"), LayerID);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, *LayerIDStr);
 }

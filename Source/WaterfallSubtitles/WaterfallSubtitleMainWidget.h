@@ -18,7 +18,9 @@ class WATERFALLSUBTITLES_API UWaterfallSubtitleMainWidget : public UUserWidget
 
 public:
 	virtual void NativeConstruct() override;
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
+	void InitSubtitles();
+	void UpdateSubtitles();
 	
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	UCanvasPanel* Pnl_Main;
@@ -29,4 +31,7 @@ public:
 
 	UPROPERTY()
 	TArray<UWaterfallSubtitleItemWidget*> ShowingSubtitles;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float UpdateInterval = .1f;
 };

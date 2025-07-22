@@ -5,6 +5,7 @@
 
 #include "WaterfallEmojiWidget.h"
 #include "WaterfallSubtitlesAsset.h"
+#include "Components/CanvasPanel.h"
 #include "Components/HorizontalBox.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
@@ -40,6 +41,41 @@ void UWaterfallSubtitleItemWidget::SetData(const FWaterfallSubtitleItem& InItemI
 				SubtitleItemUI->SetIcon(Emoji);
 				HB_Content->AddChildToHorizontalBox(SubtitleItemUI);
 			}
+		}
+	}
+}
+
+void UWaterfallSubtitleItemWidget::SetSubtitleTranslation(UWidget* RootWidget, const FVector2D& InTrans)
+{
+	if (UWaterfallEmojiWidget* EmojiWidget = Cast<UWaterfallEmojiWidget>(RootWidget))
+	{
+		RootWidget = EmojiWidget->Image_Emoji;
+	}
+	
+	TSharedRef<SWidget> SubtitleSWidget = RootWidget->TakeWidget();
+	TWeakPtr<FSlateCachedElementList> SubtitlePtr = SubtitleSWidget->GetPersistentState().CachedElementHandle.Ptr;
+	if (SubtitlePtr.IsValid())
+	{
+		TSharedPtr<FSlateCachedElementList> SubtitlePtrPin = SubtitlePtr.Pin();
+		if (SubtitlePtrPin.IsValid())
+		{
+			if (FSlateCachedFastPathRenderingData* CacheRenderDataPtr = SubtitlePtrPin->CachedRenderingData)
+			{
+				FSlateVertexArray& SubtitleItemVertices = CacheRenderDataPtr->Vertices;
+				for(FSlateVertex& Vertex : SubtitleItemVertices)
+				{
+					Vertex.Position = FVector2f(Vertex.Position.X + InTrans.X, Vertex.Position.Y + InTrans.Y );
+				}
+			}
+		}
+	}
+	
+	if (UPanelWidget* RootPanel = Cast<UPanelWidget>(RootWidget))
+	{
+		TArray<UWidget*> ChildWidgets = RootPanel->GetAllChildren();
+		for (auto& ChildWidget : ChildWidgets)
+		{
+			SetSubtitleTranslation(ChildWidget, InTrans);
 		}
 	}
 }

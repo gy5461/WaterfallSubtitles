@@ -22,6 +22,9 @@ public:
 	UFUNCTION()
 	void SetData(const FWaterfallSubtitleItem& InItemInfo);
 
+	UFUNCTION()
+	void SetSubtitleTranslation(UWidget* RootWidget, const FVector2D& InTrans);
+
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	UTextBlock* Text_Content;
 
@@ -33,6 +36,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	UHorizontalBox* HB_Content;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
+	UHorizontalBox* HB_Subtitle;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	TSubclassOf<UUserWidget> EmojiItemClass;
