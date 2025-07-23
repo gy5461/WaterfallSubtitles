@@ -90,7 +90,7 @@ void UWaterfallSubtitleMainWidget::UpdateSubtitles()
 				float ViewportScale = UWidgetLayoutLibrary::GetViewportScale(this);
 				float ScreenSizeX = ViewportSize.X / ViewportScale;
 				
-				FVector2D ItemStartPos = FVector2D(ScreenSizeX, SubtitleItemUI->CacheStartHeight);
+				FVector2D ItemStartPos = FVector2D(ScreenSizeX + ItemSize.X * 0.5, SubtitleItemUI->CacheStartHeight);
 				ItemSlot->SetPosition(ItemStartPos);
 			}
 			else
