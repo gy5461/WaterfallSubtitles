@@ -22,9 +22,6 @@ public:
 	UFUNCTION()
 	void SetData(const FWaterfallSubtitleItem& InItemInfo);
 
-	UFUNCTION()
-	void SetSubtitleTranslation(const UUserWidget* RootWidget, const FVector2D& InTrans);
-
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	UTextBlock* Text_Content;
 

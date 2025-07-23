@@ -43,33 +43,3 @@ void UWaterfallSubtitleItemWidget::SetData(const FWaterfallSubtitleItem& InItemI
 		}
 	}
 }
-
-void UWaterfallSubtitleItemWidget::SetSubtitleTranslation(const UUserWidget* RootWidget, const FVector2D& InTrans)
-{
-	RootWidget->WidgetTree->ForEachWidget([&](UWidget* InWidget)
-	{
-		if(UUserWidget* InUserWidget = Cast<UUserWidget>(InWidget))
-		{
-			SetSubtitleTranslation(InUserWidget, InTrans);
-			return;
-		}
-		
-		TSharedRef<SWidget> SubtitleSWidget = InWidget->TakeWidget();
-		TWeakPtr<FSlateCachedElementList> SubtitlePtr = SubtitleSWidget->GetPersistentState().CachedElementHandle.Ptr;
-		if (SubtitlePtr.IsValid())
-		{
-			TSharedPtr<FSlateCachedElementList> SubtitlePtrPin = SubtitlePtr.Pin();
-			if (SubtitlePtrPin.IsValid())
-			{
-				if (FSlateCachedFastPathRenderingData* CacheRenderDataPtr = SubtitlePtrPin->CachedRenderingData)
-				{
-					FSlateVertexArray& SubtitleItemVertices = CacheRenderDataPtr->Vertices;
-					for(FSlateVertex& Vertex : SubtitleItemVertices)
-					{
-						Vertex.Position = FVector2f(Vertex.Position.X + InTrans.X, Vertex.Position.Y + InTrans.Y );
-					}
-				}
-			}
-		}
-	});
-}

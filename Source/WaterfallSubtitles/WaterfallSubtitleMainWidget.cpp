@@ -91,13 +91,11 @@ void UWaterfallSubtitleMainWidget::UpdateSubtitles()
 				float ScreenSizeX = ViewportSize.X / ViewportScale;
 				
 				FVector2D ItemStartPos = FVector2D(ScreenSizeX, SubtitleItemUI->CacheStartHeight);
-				SubtitleItemUI->SetSubtitleTranslation(SubtitleItemUI, ItemStartPos - CurPos);
 				ItemSlot->SetPosition(ItemStartPos);
 			}
 			else
 			{
 				FVector2D NewPos = FVector2D(CurPos.X - SubtitleItemUI->CacheSpeed * UpdateInterval, CurPos.Y);
-				SubtitleItemUI->SetSubtitleTranslation(SubtitleItemUI,NewPos - CurPos);
 				ItemSlot->SetPosition(NewPos);
 			}
 		}
