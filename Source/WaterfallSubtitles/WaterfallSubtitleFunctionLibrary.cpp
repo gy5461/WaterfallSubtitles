@@ -33,7 +33,7 @@ void UWaterfallSubtitleFunctionLibrary::Init()
 	{
 		CacheSubtitlesData.Empty();
 		int32 Num = 1;
-		for(int32 Idx = 0; Idx < 100; ++Idx)
+		for(int32 Idx = 0; Idx < WaterfallDA->SubtitlesCount / 10; ++Idx)
 		{
 			for(auto& Subtitle : WaterfallDA->Subtitles)
 			{

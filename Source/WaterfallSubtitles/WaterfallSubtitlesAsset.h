@@ -51,4 +51,7 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "字幕列表"))
 	TMap<int32, FWaterfallSubtitleItem> Subtitles;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "字幕数量"))
+	int32 SubtitlesCount = 1000;
 };
