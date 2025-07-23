@@ -33,7 +33,17 @@ void UWaterfallSubtitleFunctionLibrary::Init()
 	{
 		CacheSubtitlesData.Empty();
 		int32 Num = 1;
-		for(int32 Idx = 0; Idx < WaterfallDA->SubtitlesCount / 10; ++Idx)
+		int32 Cnt = WaterfallDA->SubtitlesCount;
+		if (Cnt < 10)
+		{
+			Cnt = 1;
+		}
+		else
+		{
+			Cnt = Cnt / 10;
+		}
+		
+		for(int32 Idx = 0; Idx < Cnt; ++Idx)
 		{
 			for(auto& Subtitle : WaterfallDA->Subtitles)
 			{
@@ -42,6 +52,11 @@ void UWaterfallSubtitleFunctionLibrary::Init()
 				Subtitle.Value.StartTime = FMath::RandRange(0, 5);
 				CacheSubtitlesData.Add(Num, Subtitle.Value);
 				Num++;
+
+				if (Num > WaterfallDA->SubtitlesCount)
+				{
+					break;
+				}
 			}
 		}
 	}
