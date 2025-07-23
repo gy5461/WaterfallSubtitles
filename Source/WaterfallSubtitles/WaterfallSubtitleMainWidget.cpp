@@ -7,9 +7,9 @@
 #include "WaterfallSubtitleItemWidget.h"
 #include "WaterfallSubtitlesAsset.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
+#include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
-#include "Components/HorizontalBox.h"
 
 void UWaterfallSubtitleMainWidget::NativeConstruct()
 {
@@ -78,12 +78,6 @@ void UWaterfallSubtitleMainWidget::UpdateSubtitles()
 		{
 			continue;
 		}
-
-		auto SetSubtitleTranslation = [&](const FVector2D& InTrans)
-		{
-			SubtitleItemUI->SetSubtitleTranslation(SubtitleItemUI->HB_Subtitle, InTrans);
-		};
-		
 		
 		if (UCanvasPanelSlot* ItemSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(SubtitleItemUI))
 		{
@@ -97,13 +91,13 @@ void UWaterfallSubtitleMainWidget::UpdateSubtitles()
 				float ScreenSizeX = ViewportSize.X / ViewportScale;
 				
 				FVector2D ItemStartPos = FVector2D(ScreenSizeX, SubtitleItemUI->CacheStartHeight);
-				SetSubtitleTranslation(ItemStartPos - CurPos);
+				SubtitleItemUI->SetSubtitleTranslation(SubtitleItemUI, ItemStartPos - CurPos);
 				ItemSlot->SetPosition(ItemStartPos);
 			}
 			else
 			{
 				FVector2D NewPos = FVector2D(CurPos.X - SubtitleItemUI->CacheSpeed * UpdateInterval, CurPos.Y);
-				SetSubtitleTranslation(NewPos - CurPos);
+				SubtitleItemUI->SetSubtitleTranslation(SubtitleItemUI,NewPos - CurPos);
 				ItemSlot->SetPosition(NewPos);
 			}
 		}

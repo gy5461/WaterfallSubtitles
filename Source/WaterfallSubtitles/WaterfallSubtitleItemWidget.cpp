@@ -5,11 +5,10 @@
 
 #include "WaterfallEmojiWidget.h"
 #include "WaterfallSubtitlesAsset.h"
-#include "Components/CanvasPanel.h"
+#include "Blueprint/WidgetTree.h"
 #include "Components/HorizontalBox.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
-#include "Engine/AssetManager.h"
 
 void UWaterfallSubtitleItemWidget::SetData(const FWaterfallSubtitleItem& InItemInfo)
 {
@@ -45,37 +44,32 @@ void UWaterfallSubtitleItemWidget::SetData(const FWaterfallSubtitleItem& InItemI
 	}
 }
 
-void UWaterfallSubtitleItemWidget::SetSubtitleTranslation(UWidget* RootWidget, const FVector2D& InTrans)
+void UWaterfallSubtitleItemWidget::SetSubtitleTranslation(const UUserWidget* RootWidget, const FVector2D& InTrans)
 {
-	if (UWaterfallEmojiWidget* EmojiWidget = Cast<UWaterfallEmojiWidget>(RootWidget))
+	RootWidget->WidgetTree->ForEachWidget([&](UWidget* InWidget)
 	{
-		RootWidget = EmojiWidget->Image_Emoji;
-	}
-	
-	TSharedRef<SWidget> SubtitleSWidget = RootWidget->TakeWidget();
-	TWeakPtr<FSlateCachedElementList> SubtitlePtr = SubtitleSWidget->GetPersistentState().CachedElementHandle.Ptr;
-	if (SubtitlePtr.IsValid())
-	{
-		TSharedPtr<FSlateCachedElementList> SubtitlePtrPin = SubtitlePtr.Pin();
-		if (SubtitlePtrPin.IsValid())
+		if(UUserWidget* InUserWidget = Cast<UUserWidget>(InWidget))
 		{
-			if (FSlateCachedFastPathRenderingData* CacheRenderDataPtr = SubtitlePtrPin->CachedRenderingData)
+			SetSubtitleTranslation(InUserWidget, InTrans);
+			return;
+		}
+		
+		TSharedRef<SWidget> SubtitleSWidget = InWidget->TakeWidget();
+		TWeakPtr<FSlateCachedElementList> SubtitlePtr = SubtitleSWidget->GetPersistentState().CachedElementHandle.Ptr;
+		if (SubtitlePtr.IsValid())
+		{
+			TSharedPtr<FSlateCachedElementList> SubtitlePtrPin = SubtitlePtr.Pin();
+			if (SubtitlePtrPin.IsValid())
 			{
-				FSlateVertexArray& SubtitleItemVertices = CacheRenderDataPtr->Vertices;
-				for(FSlateVertex& Vertex : SubtitleItemVertices)
+				if (FSlateCachedFastPathRenderingData* CacheRenderDataPtr = SubtitlePtrPin->CachedRenderingData)
 				{
-					Vertex.Position = FVector2f(Vertex.Position.X + InTrans.X, Vertex.Position.Y + InTrans.Y );
+					FSlateVertexArray& SubtitleItemVertices = CacheRenderDataPtr->Vertices;
+					for(FSlateVertex& Vertex : SubtitleItemVertices)
+					{
+						Vertex.Position = FVector2f(Vertex.Position.X + InTrans.X, Vertex.Position.Y + InTrans.Y );
+					}
 				}
 			}
 		}
-	}
-	
-	if (UPanelWidget* RootPanel = Cast<UPanelWidget>(RootWidget))
-	{
-		TArray<UWidget*> ChildWidgets = RootPanel->GetAllChildren();
-		for (auto& ChildWidget : ChildWidgets)
-		{
-			SetSubtitleTranslation(ChildWidget, InTrans);
-		}
-	}
+	});
 }
